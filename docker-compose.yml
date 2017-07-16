@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+    savesoundcloud:
+        image: savesoundcloud
+        environment:
+            DEBUG: 'true'
+            LC_ALL: 'C.UTF-8'
+            LANG: 'C.UTF-8'
+            FLASK_APP: 'savesoundcloud/__init__.py'
+            FLASK_DEBUG: 1
+        volumes:
+            - .:/home/dance/savesoundcloud
+        ports:
+            - "5000:5000"
+        tty: true
+        stdin_open: true

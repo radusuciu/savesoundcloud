@@ -1,0 +1,6 @@
+flask
+gunicorn
+pyyaml
+requests
+six
+soundcloud
