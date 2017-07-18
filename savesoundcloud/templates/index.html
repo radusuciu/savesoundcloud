@@ -11,19 +11,27 @@
             </div>
         </a>
     </h1>
-    <div class="ui action big input">
-        <input v-model="username" type="text" placeholder="SoundCloud Username">
-        <select v-model="endpoint" class="ui compact selection dropdown">
-            <option selected="" value="likes">Likes</option>
-            <option value="playlists">Playlists</option>
-            <option value="reposts">Reposts</option>
-            <option value="all">All</option>
-        </select>
-        <a :href="downloadUrl" class="ui right labeled icon teal-green big button">
-            <i class="right download icon"></i>
-            Download .csv
-        </a>
+    <div class="ui fluid search">
+        <div class="ui action big fluid input">
+            <input v-model="username" class="prompt" type="text" placeholder="SoundCloud Username">
+            <a :href="downloadUrl" @click="download($event)" :class="{ disabled: loading }" class="ui right labeled icon teal-green big button">
+                <i :class="['right', loading ? 'notched circle loading': 'download', 'icon']"></i>
+                Download .csv
+            </a>
+        </div>
+        <div class="results"></div>
     </div>
+    <template .v-cloak>
+    <div class="ui error message" v-if="errors.length">
+        <i class="close icon" @click="errors = []"></i>
+        <div class="header">
+            There were some errors with your submission
+        </div>
+        <ul class="list">
+            <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </div>
+    </template>
 </div>
 {% endraw %}
 {% endblock %}
