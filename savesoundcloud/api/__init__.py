@@ -32,32 +32,55 @@ def export_all(username):
     with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
         for endpoint in ENDPOINTS:
             try:
-                filename, file = to_csv(username, endpoint, user_info=user)
-                zf.writestr(filename, file.getvalue())
-            except:
+                for filename, file in endpoint_to_csv(username, endpoint, user_info=user):
+                    zf.writestr(filename, file.getvalue())
+            except Exception as e:
+                raise(e)
                 pass
 
     memory_file.seek(0)
     return memory_file
 
 
-def to_csv(username, endpoint, user_info=None):
+def endpoint_to_csv(username, endpoint, user_info=None):
     coll = consume(username, endpoint, user_info)
     order = COLUMN_ORDERS.get(endpoint)
-    filename = '{}-{}.csv'.format(username, endpoint)
 
+    files = []
+    data = ((line.get(item, None) for item in order) for line in coll)
+    mem = to_csv(order, data)
+    files.append(('{}-{}.csv'.format(username, endpoint), mem))
+
+    # processing out tracks from playlists
+    # and saving in separate csv files
+    if endpoint == 'playlists':
+        # embedded track entries in playlist endpoint share headers with /users/favorites
+        order = COLUMN_ORDERS.get('favorites')
+
+        # each line in this case will generate a new file
+        # in a playlists sub-folder
+        for playlist in coll:
+            playlist_id = playlist.get('permalink', playlist.get('id'))
+            filename = 'playlists/{}.csv'.format(playlist_id)
+            tracks = playlist.get('tracks')
+            data = ((line.get(item, None) for item in order) for line in tracks)
+            files.append((filename, to_csv(order, data)))
+
+    return files
+
+def to_csv(headers, data, to_bytes=True):
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(order)
+    writer.writerow(headers)
+    writer.writerows(data)
 
-    for line in coll:
-        writer.writerow(line.get(item, None) for item in order)
-
-    mem = io.BytesIO()
-    mem.write(output.getvalue().encode('utf-8'))
-    mem.seek(0)
-
-    return filename, mem
+    if to_bytes:
+        mem = io.BytesIO()
+        mem.write(output.getvalue().encode('utf-8'))
+        mem.seek(0)
+        return mem
+    else:
+        return output
 
 
 def consume(username, endpoint, user_info=None):
