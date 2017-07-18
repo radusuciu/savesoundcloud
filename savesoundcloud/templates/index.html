@@ -12,9 +12,9 @@
         </a>
     </h1>
     <div class="ui fluid search">
-        <div class="ui action big fluid input">
-            <input v-model="username" class="prompt" type="text" placeholder="SoundCloud Username">
-            <a :href="downloadUrl" @click="download($event)" :class="{ disabled: loading }" class="ui right labeled icon teal-green big button">
+        <div :class="{ disabled: loading }" class="ui action big fluid input">
+            <input @keyup.enter="onEnter($event)" v-model="username" class="prompt" type="text" placeholder="SoundCloud Username">
+            <a :href="downloadUrl" @click="download($event)" :class="{ disabled: loading }" class="ui right labeled icon teal-green big button" ref="downloadLink">
                 <i :class="['right', loading ? 'notched circle loading': 'download', 'icon']"></i>
                 Download .csv
             </a>

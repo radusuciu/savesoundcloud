@@ -4,12 +4,11 @@ var app = new Vue({
     el: '#app',
     data: {
         username: '',
-        endpoint: 'likes',
-        bootstrap: {},
         errors: [],
         loading: false,
         uuid: null,
-        interval: null
+        interval: null,
+        $autocomplete: null
     },
     computed: {
         downloadUrl: function() {
@@ -18,14 +17,13 @@ var app = new Vue({
     },
     methods: {
         download: function(e) {
-            // generate a new uuid right before request is started
             if (!this.username) {
-                e.preventDefault();
+                if (e) {
+                    e.preventDefault();
+                }
                 this.errors = ['Please enter a valid username'];
                 return;
             }
-
-            this.uuid = this.uuidv4();
 
             if (this.interval) {
                 clearInterval(this.interval);
@@ -34,6 +32,18 @@ var app = new Vue({
             this.errors = [];
             this.loading = true;
             this.interval = setInterval(this.checkStatus(this.uuid), 1000);
+
+            // generate a new uuid only after request goes through
+            // using timeout because otherwise we update the href property of the link
+            // and we end up with mismatching uuids associated with this request
+            setTimeout(function() {
+                this.uuid = this.uuidv4();
+            }.bind(this), 0);
+        },
+        onEnter: function(e) {
+            e.target.blur();
+            this.$autocomplete.search('hide results');
+            this.$refs.downloadLink.click();
         },
         checkStatus: function(uuid) {
             // using closure to make sure that we're not affected by uuid changes after the
@@ -87,7 +97,7 @@ var app = new Vue({
     mounted: function() {
         var me = this;
 
-        this.bootstrap = window.bootstrap;
+        this.uuid = this.uuidv4();
 
         this.$autocomplete = $('.ui.search').search({
             apiSettings: {

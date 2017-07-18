@@ -34,8 +34,9 @@ def export_all(username):
             try:
                 for filename, file in endpoint_to_csv(username, endpoint, user_info=user):
                     zf.writestr(filename, file.getvalue())
-            except Exception as e:
-                raise(e)
+            except:
+                # swallowing exceptions because errors in getting data from at least
+                # one of the endpoints are common, eg. a user has not uploaded any tracks
                 pass
 
     memory_file.seek(0)
