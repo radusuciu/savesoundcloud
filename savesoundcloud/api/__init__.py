@@ -43,19 +43,15 @@ def export_all(username):
 
 def to_csv(username, endpoint, user_info=None):
     coll = consume(username, endpoint, user_info)
-    order = COLUMN_ORDERS.get(endpoint, None)
+    order = COLUMN_ORDERS.get(endpoint)
     filename = '{}-{}.csv'.format(username, endpoint)
 
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(order or coll[0].keys())
+    writer.writerow(order)
 
-    if order:
-        for line in coll:
-            writer.writerow(line.get(item, None) for item in order)
-    else:
-        for line in coll:
-            writer.writerow(line.get(item, None) for item in line)
+    for line in coll:
+        writer.writerow(line.get(item, None) for item in order)
 
     mem = io.BytesIO()
     mem.write(output.getvalue().encode('utf-8'))
