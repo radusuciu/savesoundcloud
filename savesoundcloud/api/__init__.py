@@ -16,6 +16,7 @@ COLUMN_ORDERS = {
     'followers': ['id', 'permalink', 'username', 'first_name', 'last_name', 'full_name', 'description', 'followings_count', 'followers_count', 'public_favorites_count', 'likes_count', 'comments_count', 'track_count', 'reposts_count', 'playlist_count', 'country', 'city', 'discogs_name', 'myspace_name', 'last_modified', 'online', 'plan', 'website', 'website_title', 'avatar_url', 'kind', 'uri', 'permalink_url'],
     'followings': ['id', 'permalink', 'username', 'first_name', 'last_name', 'full_name', 'description', 'followings_count', 'followers_count', 'public_favorites_count', 'likes_count', 'comments_count', 'track_count', 'reposts_count', 'playlist_count', 'country', 'city', 'discogs_name', 'myspace_name', 'last_modified', 'online', 'plan', 'website', 'website_title', 'avatar_url', 'kind', 'uri', 'permalink_url'],
     'comments': ['id', 'created_at', 'body', 'timestamp',  'track_id', 'user_id', 'user', 'uri'],
+    'playlists': ['id', 'title', 'permalink', 'permalink_url', 'track_count', 'duration', 'genre', 'tag_list', 'description', 'user', 'user_id', 'created_at', 'release', 'release_day', 'release_month', 'release_year', 'artwork_url', 'label_id', 'label_name', 'reposts_count', 'likes_count', 'downloadable', 'ean', 'embeddable_by', 'kind', 'license', 'playlist_type', 'purchase_title', 'purchase_url', 'sharing', 'streamable', 'type', 'uri', 'last_modified']
 }
 
 class UserNotFound(Exception):
