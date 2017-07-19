@@ -1,9 +1,12 @@
 from flask import Flask, make_response, jsonify
+from redis import StrictRedis
 from http import HTTPStatus
 import config.config as config
 
 app = Flask(__name__)
 app.config.from_object(config.config)
+
+redis = StrictRedis(host='redis')
 
 # Register blueprints
 from savesoundcloud.views import home, api_blueprint

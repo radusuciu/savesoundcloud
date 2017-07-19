@@ -1,4 +1,5 @@
-from flask import Blueprint, send_file, render_template, session, request
+from flask import Blueprint, send_file, render_template, request
+from savesoundcloud import redis
 import savesoundcloud.api as api
 
 
@@ -17,9 +18,9 @@ def export_all(user):
     try:
         crumb = request.args.get('crumb')
 
-        session[crumb] = 'started'
+        redis.set(crumb, 'started', ex=3600)
         file = api.export_all(user)
-        session[crumb] = 'finished'
+        redis.set(crumb, 'finished')
 
         return send_file(
             file,
@@ -28,15 +29,15 @@ def export_all(user):
             mimetype='application/zip, application/octet-stream'
         )
     except api.UserNotFound as e:
-        session[crumb] = 'error'
+        redis.set(crumb, 'error')
         return ('', 204)
 
 
 @home.route('/status/<crumb>')
 def status(crumb):
-    status = session.get(crumb, 'none')
+    status = redis.get(crumb)
 
-    if status in ('finished', 'error'):
-        session.pop(crumb)
+    if status and status.decode('utf-8') in ('finished', 'error'):
+        redis.delete(crumb)
 
-    return status
+    return status or 'none'
