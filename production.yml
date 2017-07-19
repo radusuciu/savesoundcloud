@@ -6,3 +6,5 @@ services:
         environment:
             DEBUG: 'false'
             FLASK_DEBUG: 0
+        ports:
+          - "5001"

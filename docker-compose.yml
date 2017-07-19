@@ -12,7 +12,7 @@ services:
         volumes:
             - .:/home/dance/savesoundcloud
         ports:
-            - "5000:5000"
+            - "5001:5001"
         tty: true
         stdin_open: true
     redis:
