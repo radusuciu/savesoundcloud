@@ -6,4 +6,4 @@ workers = multiprocessing.cpu_count() * 2 + 1
 loglevel = 'INFO'
 errorlog = '-'
 accesslog = '-'
-timeout = 180
+timeout = 360
