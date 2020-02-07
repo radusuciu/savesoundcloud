@@ -19,6 +19,12 @@ COLUMN_ORDERS = {
     'playlists': ['id', 'title', 'permalink', 'permalink_url', 'track_count', 'duration', 'genre', 'tag_list', 'description', 'user', 'user_id', 'created_at', 'release', 'release_day', 'release_month', 'release_year', 'artwork_url', 'label_id', 'label_name', 'reposts_count', 'likes_count', 'downloadable', 'ean', 'embeddable_by', 'kind', 'license', 'playlist_type', 'purchase_title', 'purchase_url', 'sharing', 'streamable', 'type', 'uri', 'last_modified']
 }
 
+MAX_RETRIES = 3
+
+sesh = requests.Session()
+adapter = requests.adapters.HTTPAdapter(max_retries=MAX_RETRIES)
+sesh.mount('https://', adapter)
+
 class UserNotFound(Exception):
     pass
 
@@ -119,4 +125,4 @@ def get(url, params={}):
     params['client_id'] = CLIENT_ID
     if 'http' not in url:
         url = API_BASE + url
-    return requests.get(url, params=params).json()
+    return sesh.get(url, params=params).json()
