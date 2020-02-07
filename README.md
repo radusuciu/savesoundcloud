@@ -11,4 +11,4 @@ Savesoundcloud makes it easy to export your soundcloud data to .csv for archival
 
 I do not guarantee that the information will be 100% complete, as the SoundCloud API will not always return what you see on the website, depending on the preferences of the content owner.
 
-Go to http://soundcloudcsv.com to give it a spin!
+Go to https://soundcloudcsv.com to give it a spin!
