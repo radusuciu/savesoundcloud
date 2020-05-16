@@ -68,7 +68,6 @@ def endpoint_to_csv(username, endpoint, user_info=None):
         # in a playlists sub-folder
         for playlist in coll:
             playlist_id = playlist.get('permalink', playlist.get('id'))
-            print('playlist', playlist_id)
             filename = 'playlists/{}.csv'.format(playlist_id)
             tracks = playlist.get('tracks')
             data = ((line.get(item, None) for item in order) for line in tracks)
