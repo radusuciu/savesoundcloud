@@ -13,5 +13,5 @@ pkg-resources==0.0.0
 PyYAML==5.1.2
 redis==3.3.8
 requests==2.22.0
-urllib3==1.25.4
+urllib3==1.25.8
 Werkzeug==0.16.0
